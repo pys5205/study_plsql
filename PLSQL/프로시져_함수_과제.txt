@@ -1,0 +1,83 @@
+--* 프로시져
+--1. 해당 입사년도에 입사한 사원의 인원수와 평균급여를 출력하는 프로시져
+create or replace procedure p_state
+(v_day varchar2,
+v_result out varchar2)
+
+is
+v_sal number(10);
+v_count number(10);
+
+begin
+    select count(*), avg(sapay) into v_count, v_sal from sawon where substr(v_day,3,2)=substr(sahire,1,2);
+    v_result := v_day||'년 입사한 사원은 '||v_count||'명, 평균급여는 '||v_sal||'이다';
+end;
+/
+
+--호출형태
+variable result varchar2(100)
+exec p_state(1990, :result)
+print result		// [1990년 입사한 사원은 XX명, 평균급여는 XXXX이다] 형태로 출력
+
+--* 함수
+--1. 숫자 형태의 값을 가지고 100의 '*'하나를 그래프처럼 반환하는 함수
+select saname, sapay, f_num_graph(sapay) "급여그래프" from sawon;
+create or replace function f_num_graph
+(v_sapay number)
+return varchar2
+
+is
+star varchar2(100);
+
+begin
+
+    star := v_sapay/100;
+    return lpad('*',star,'*');
+end;
+/
+
+--2. 날짜 형태의 값을 가지고 [xx년 xx개월]형태로 기간을 반환하는 함수
+select saname, f_work_term(sahire) "근무기간" from sawon;
+create or replace function f_work_term
+(v_sahire date)
+return varchar2
+
+is
+years varchar2(110);
+months varchar2(110);
+
+begin
+    years := floor(months_between(sysdate, v_sahire)/12);
+    months := floor(mod(months_between(sysdate, v_sahire),12));
+
+    return years||'년'||months||'개월';
+end;
+/
+
+--호출형태
+col star format a50
+col 근무기간 format a20
+select saname, sapay, f_graph(sapay) star, sahire, f_gigan(sahire) 근무기간 from sawon;
+
+3. 날짜에 년수, 개월수, 날수를 매개변수로 보내 더하는 함수를 생성하라
+-- (입사일로부터 년 수/개월/일 을 더해서 출력하는 함수)
+create or replace function add_date
+(v_sahire date,
+year number,
+month number,
+day number)
+return date
+
+is
+re date;
+
+begin
+    re := v_sahire + to_yminterval(to_char(year,'00')||'-'||to_char(month,'00'));
+    re := re + to_dsinterval(day ||' 00:00:00');    
+    return re;
+end;
+/
+
+--입사일로부터 3년 1개월 3일 더한값 출력(호출형태)
+select saname, sahire, add_date(sahire, 3, 1, 3) "심사일" from sawon;
+

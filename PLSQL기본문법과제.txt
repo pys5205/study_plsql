@@ -1,0 +1,82 @@
+--1. 입력받은 숫자가 홀/짝수인지를 출력하는 프로그램
+set serveroutput on
+set verify off
+
+accept num prompt 'num -> '
+
+declare
+	i number(4) := mod(&num,2);
+begin
+	if  i > 0 then
+		dbms_output.put_line('num  odd -> '||&num);
+	else 
+		dbms_output.put_line('num even -> '||&num);
+	end if;
+end;
+/
+
+--2. 입력한 숫자의 구구단을 출력하는 프로그램
+set serveroutput on
+set verify off
+
+accept num prompt 'gugudan -> '
+
+
+begin
+	for i in 1..9 loop
+		dbms_output.put_line('&num * '|| i||' = ' ||&num*i);
+	end loop;
+end;
+/
+
+--3. 1~9단까지 출력하는 프로그램 (다중 for문)
+set serveroutput on
+set verify off
+
+begin
+	for i in 1..9 loop
+		for j in 1..9 loop
+			dbms_output.put_line(i|| '*' ||j||' = ' ||i*j);
+		end loop;
+	end loop;
+end;
+/
+
+--4. 수를 입력받아서 그 수만큼 '*'을 누적출력하는 프로그램
+--ex) 4
+--*
+--**
+--***
+--****
+set serveroutput on
+set verify off
+
+accept num prompt 'num -> '
+
+begin
+	for i in 1..&num loop
+		dbms_output.put_line(lpad('*', i, '*'));
+	end loop;
+end;
+/
+
+--5. 다음이 출력되도록 프로그램을 작성
+
+--2x1=2 3x1=3 ........ 9x1=9
+--2x2=4 3x2=6 ........ 9x2=18
+--....
+--2x=9.....              9x9=81
+
+set serveroutput on
+set verify off
+
+begin
+	for i in 1..9 loop
+		for j in 2..9 loop
+			dbms_output.put(j ||' x '|| i ||' = '|| j*i ||' ');
+		end loop;
+		dbms_output.put_line('');
+	end loop;	
+end;
+/
+

@@ -1,0 +1,84 @@
+--1.
+
+set serveroutput on
+set verify off
+
+accept num prompt '숫자입력->'
+
+declare
+	num number := &num;
+
+begin
+	if (mod(num, 2) = 0) then
+		dbms_output.put_line('짝수');
+	else 
+		dbms_output.put_line('홀수');
+	end if;
+end;
+/
+
+--2.
+
+set serveroutput on
+set verify off
+
+accept num2 prompt '구구단을 위한 숫자입력->'
+
+declare
+	num2 number := &num2;
+begin
+	for i in 1..9 loop
+		dbms_output.put_line(num2 || 'X' || i);
+	end loop;
+end;
+/
+
+--3.
+
+set serveroutput on
+set verify off
+
+begin
+	for j in 1..9 loop
+		for z in 1..9 loop 
+			dbms_output.put_line(j || ' X ' || z);
+		end loop;
+	end loop;
+end;
+/
+
+--4.
+
+set serveroutput on
+set verify off
+
+accept num3 prompt '별을 위한 숫자입력->'
+
+declare
+	m number :=1;
+	num3 number := &num3;
+	var2 varchar2(10) := null;
+begin
+	while m <= num3 loop
+		var2 := var2 || '*';
+		dbms_output.put_line(var2);
+		m := m+1;
+	end loop;		
+end;
+/
+
+--5.
+
+set serveroutput on
+set verify off
+
+begin
+	for u in 1..9 loop
+		for a in 2..9 loop 
+			dbms_output.put(a || 'X' || u || '=' || a * u );
+			dbms_output.put(' ');
+		end loop;
+		dbms_output.put_line('');
+	end loop;
+end;
+/
